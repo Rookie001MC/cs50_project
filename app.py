@@ -12,8 +12,10 @@ access_token = os.getenv("ACCESS_TOKEN", None)
 @app.route("/webhook", methods=["GET"])
 def webhook_verify():
     mode = request.args.get("hub.mode")
-    token = request.args.get("hub.token")
+    token = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
+
+    print(f"{mode}\n{token}\n{challenge}")
 
     if mode and token:
         if mode == "subscribe" and token == verify_token:
