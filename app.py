@@ -5,8 +5,7 @@ import requests
 from flask import Flask, Response, render_template, request
 
 import global_vars
-
-from .scripts.utils import handle_message, handle_postback
+from scripts.utils import handle_message, handle_postback
 
 app = Flask(__name__)
 
