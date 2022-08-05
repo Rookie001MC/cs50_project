@@ -4,10 +4,14 @@ import os
 import requests
 from flask import Flask, Response, render_template, request
 
+import global_vars
+
+from .scripts.utils import handle_message, handle_postback
+
 app = Flask(__name__)
 
-verify_token = os.getenv("VERIFY_TOKEN", None)
-access_token = os.getenv("ACCESS_TOKEN", None)
+verify_token = global_vars.verify_token
+access_token = global_vars.access_token
 
 
 @app.route("/webhook", methods=["GET"])
@@ -54,7 +58,7 @@ def webhook_handler():
 def profile_setup():
     """
     Setup the bot using the Messenger Profile API.
-    """ 
+    """
 
     profile_url = f"https://graph.facebook.com/v14.0/me/messenger_profile?access_token={access_token}"
     profile = {
@@ -87,35 +91,7 @@ def profile_setup():
         print(f"No connection: {err}")
 
 
-
-
 # Utilities go here.
-
-def handle_message():
-    pass
-
-def handle_postback():
-    pass
-
-def call_sendAPI(sender_psid, response):
-    graphapi_url = f"https://graph.facebook.com/v14.0/me/messages?access_token={access_token}"
-    payload = {
-        "recipient": {
-            "id": sender_psid,
-        },
-        "message": {
-            "text": response,
-        }
-    }
-
-    try:
-        r = requests.post(graphapi_url, json=payload)
-
-    except requests.exceptions.HTTPError as err:
-        print(f"Message failed to send: {err}")
-        return Response(response=err, status=r.status_code)
-    except requests.exceptions.ConnectionError as err:
-        print(f"No connection: {err}")
 
 if __name__ == "__main__":
     app.run(debug=True)
