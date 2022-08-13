@@ -1,5 +1,4 @@
 import json
-import os
 
 import requests
 from flask import Flask, Response, render_template, request
@@ -89,8 +88,6 @@ def profile_setup():
     except requests.exceptions.ConnectionError as err:
         print(f"No connection: {err}")
 
-
-# Utilities go here.
 
 if __name__ == "__main__":
     app.run(debug=True)
