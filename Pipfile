@@ -8,6 +8,8 @@ flask = "*"
 python-dotenv = "*"
 requests = "*"
 xkcd = "*"
+pytest = "*"
+pytest-randomly = "*"
 
 [dev-packages]
 black = "*"
