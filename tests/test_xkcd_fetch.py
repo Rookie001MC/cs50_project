@@ -45,3 +45,10 @@ def test_random():
 
     assert alt_text == xkcd.getRandomComic().getAltText()
     assert image_url == xkcd.getRandomComic().getImageLink()
+
+def test_out_of_bounds():
+    out_response = fetcher(f"/xkcd 9999")
+
+    err_message = out_response["text"]
+
+    assert err_message == "An error occured, there may be a connection error, or you must have given a non-existant comic!"

@@ -19,18 +19,24 @@ def fetcher(user_input):
             specific = xkcd.getComic(int(commands[1]))
             info = info_getter(specific)
         except ValueError:
-            return "Invalid comic number or subcommand!"
+            info = "Invalid comic number or subcommand!"
 
-    response = {
-        "text": info[0],
-        "attachment": {
-            "type": "image",
-            "payload": {
-                "url": info[1],
-                "is_resuable": True,
+    if len(info) == 2:
+        response = {
+            "text": info[0],
+            "attachment": {
+                "type": "image",
+                "payload": {
+                    "url": info[1],
+                    "is_resuable": True,
+                },
             },
-        },
-    }
+        }
+    else:
+        response = {
+            "text": info,
+        }
+
     return response
 
 
@@ -40,8 +46,8 @@ def info_getter(comic):
         image_url = comic.getImageLink()
     except AttributeError:
         return "An error occured, there may be a connection error, or you must have given a non-existant comic!"
-
-    return [alt_text, image_url]
+    else:
+        return [alt_text, image_url]
 
 
 """
