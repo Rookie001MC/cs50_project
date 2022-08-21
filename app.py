@@ -1,15 +1,17 @@
 import json
+import os
 
 import requests
+from dotenv import load_dotenv
 from flask import Flask, Response, render_template, request
 
-import global_vars
 from utils import handle_message, handle_postback
 
 app = Flask(__name__)
+load_dotenv("./env")
 
-verify_token = global_vars.verify_token
-access_token = global_vars.access_token
+verify_token = os.getenv("VERIFY_TOKEN", None)
+access_token = os.getenv("ACCESS_TOKEN", None)
 
 
 @app.route("/webhook", methods=["GET"])
