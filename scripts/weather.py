@@ -4,12 +4,13 @@ import sys
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()
-
-
+load_dotenv("../.env")
 global api_key
 api_key = os.getenv("WEATHER_API_KEY", None)
+
+
 def main():
+    print(f"API Key: {api_key}")
     print(weather_fetch(input("Enter city: ").strip()))
 
 
@@ -29,7 +30,7 @@ def weather_fetch(city):
     if coords is False:
         return "City does not exist!"
     elif coords == "Err-Wrong-Format":
-        return "Invalid format! Must be (City name-Country in 2 letters"
+        return "Invalid format! Must be (City name-Country in 2 letters)"
 
     lat, lon = coords
     city_name, weather_emoji, temp, humidity, wind_speed, weather = call_weather_api(
@@ -38,7 +39,7 @@ def weather_fetch(city):
 
     message = f"""Showing temperature for {city_name}:
 
-Today's weather is {weather_emoji}\t{weather}, with temperatures at {temp} degrees Celcius.
+Today's weather is {weather_emoji}\t{weather}, with temperatures at {round(temp)} degrees Celcius.
 
 Wind speeds is {wind_speed} km/h.
 Humidity is {humidity}%."""
@@ -48,9 +49,8 @@ Humidity is {humidity}%."""
 def city_coords_fetch(city):
     """Fetches the coordinates of an user-inputted city.
 
-    The reason we need this function is because, as stated in OWM's documenta
-    -tion, built-in geocoding (which returns the weather using only the
-    city name), will be deprecated soon.
+    As stated in OWM's documentation, built-in geocoding (which returns the weather
+    using only the city name), will be deprecated soon.
 
     In order to prevent any future breakages, I built this function to search
     the given city, and return its corresponding coordinates, which will be
@@ -71,7 +71,9 @@ def city_coords_fetch(city):
         list: Contains the latitude and longitude of the inputted city.
     """
     try:
+        print(city)
         city_name, country = city.split(",")
+        print(f"{city_name}\t{country}")
     except ValueError:
         return "Err-Wrong-Format"
     GEO_API = "http://api.openweathermap.org/geo/1.0/direct"
@@ -87,11 +89,12 @@ def city_coords_fetch(city):
     if len(response) == 0:
         return False
     else:
+        print(response)
         result = response[
             0
         ]  # Since we asked the user to input the city based on the syntax, we only need the first one.
-        lat = result["lat"]
-        lon = result["lon"]
+        lat = round(float(result["lat"]), 2)
+        lon = round(float(result["lon"]), 2)
 
     return [lat, lon]
 
