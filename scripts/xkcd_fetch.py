@@ -1,10 +1,6 @@
 import xkcd
 
 
-def main():
-    pass
-
-
 def fetcher(user_input):
     commands = user_input.split()
 
