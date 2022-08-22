@@ -1,13 +1,14 @@
 import json
 import os
 
+import pytest
 import requests
-from scripts.weather import call_weather_api
+from scripts.weather import call_weather_api, city_coords_fetch
 
 TEST_LOCATIONS = [
-    ["Tay Ninh, VN", "11.3", "106.1"],
-    ["Amsterdam, NL", "52.374", "4.8897"],
-    ["Washington D.C., US", "38.8951", "-77.0364"],
+    ["Tay Ninh, VN", 11.3, 106.1],
+    ["Amsterdam, NL", 52.37, 4.89],
+    ["Washington D.C., US", 38.9, -77.04],
 ]
 
 
@@ -19,6 +20,21 @@ def test_default():
 def test_different_country():
     input = TEST_LOCATIONS[1]
     assert call_weather_api(input[1], input[2]) == generate_result(input[1], input[2])
+
+
+def test_city_coords():
+    input = TEST_LOCATIONS[2]
+    assert city_coords_fetch(input[0]) == [input[1], input[2]]
+
+
+def test_wrong_city_format():
+    input = "literally just a random string here lmao"
+    assert city_coords_fetch(input) == "Err-Wrong-Format"
+
+
+def test_no_city():
+    input = "another random string here, too"
+    assert city_coords_fetch(input) == False
 
 
 def generate_result(lat, lon):
