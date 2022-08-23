@@ -8,6 +8,7 @@ from flask import Flask, Response, render_template, request
 from utils import handle_message, handle_postback
 
 app = Flask(__name__)
+
 load_dotenv("./env")
 
 verify_token = os.getenv("VERIFY_TOKEN", None)
@@ -53,6 +54,18 @@ def webhook_handler():
     else:
         return Response(status=404)
 
+@app.route("/webhook_dev")
+def webhook_dev(): 
+    body = json.loads(request.data.decode("utf-8"))
+    for entry in body["entry"]:
+        webhook_event = entry["messaging"][0]
+        sender_psid = webhook_event["sender"]["id"]
+
+        if webhook_event["message"]:
+            handle_message(sender_psid, webhook_event["message"])
+        elif webhook_event["postback"]:
+            handle_postback(sender_psid, webhook_event["postback"])
+    return Response(status=200, response="EVENT_RECEIVED")
 
 @app.route("/profile")
 def profile_setup():
