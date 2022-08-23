@@ -3,27 +3,46 @@ import os
 
 import pytest
 import requests
-from scripts.weather import call_weather_api, city_coords_fetch
+from scripts.weather import call_weather_api, city_coords_fetch, weather_fetch
 
-TEST_LOCATIONS = [
+TEST_CASES = [
     ["Tay Ninh, VN", 11.3, 106.1],
-    ["Amsterdam, NL", 52.37, 4.89],
-    ["Washington D.C., US", 38.9, -77.04],
+    ["Amsterdam, NL", 52.374, 4.8897],
+    ["Washington D.C., US", 38.8950368, -77.0365427],
+    ["/weather London, GB", -0.1257, 51.5085],
 ]
 
 
-def test_default():
-    input = TEST_LOCATIONS[0]
-    assert call_weather_api(input[1], input[2]) == generate_result(input[1], input[2])
+def test_with_slash_commands():
+    input = TEST_CASES[3]
+    assert weather_fetch(input[0]) == generate_final_message(input[0])
 
 
-def test_different_country():
-    input = TEST_LOCATIONS[1]
-    assert call_weather_api(input[1], input[2]) == generate_result(input[1], input[2])
+def test_invalid_city_format_with_slash_commands():
+    input = "/weather wfjioawiopnvoirwnveraiourgvbaesvesiaobaesiorbnverpioubnv"
+    assert (
+        weather_fetch(input)
+        == "Invalid format! Must be (City name-Country in 2 letters)"
+    )
+
+
+def test_no_city_found_with_slash_commands():
+    input = "/weather injfaopsenmfi, fe"
+    assert weather_fetch(input) == "City does not exist!"
+
+
+def test_data():
+    input = TEST_CASES[0]
+    assert call_weather_api(input[1], input[2]) == generate_data(input[0])
+
+
+def test_data_different_country():
+    input = TEST_CASES[1]
+    assert call_weather_api(input[1], input[2]) == generate_data(input[0])
 
 
 def test_city_coords():
-    input = TEST_LOCATIONS[2]
+    input = TEST_CASES[2]
     assert city_coords_fetch(input[0]) == [input[1], input[2]]
 
 
@@ -37,12 +56,20 @@ def test_no_city():
     assert city_coords_fetch(input) == False
 
 
-def generate_result(lat, lon):
-
+def generate_data(city):
+    global api_key
     api_key = os.getenv("WEATHER_API_KEY", None)
+    if "/" in city:
+        command_args = city.split(" ", 1)
+        city = command_args[1]
+    coords = generate_geocords(city)
+    if coords is False:
+        return False
+    else:
+        lat = coords[0]
+        lon = coords[1]
     base_url = "http://api.openweathermap.org/data/2.5/weather"
     api_params = {"appid": api_key, "lat": lat, "lon": lon, "units": "metric"}
-
     response = requests.get(base_url, params=api_params)
     x = response.json()
     if x["cod"] != "404":
@@ -51,9 +78,9 @@ def generate_result(lat, lon):
 
         y = x["main"]
 
-        temp = y["temp"]
+        temp = round(y["temp"])
         humidity = y["humidity"]
-        wind_speed = x["wind"]["speed"]
+        wind_speed = round(x["wind"]["speed"], 1)
 
         z = x["weather"]
 
@@ -69,16 +96,6 @@ def generate_result(lat, lon):
 
 
 def get_weather_emoji(weather_id):
-    """Returns the emoji corresponding to the weather ID.
-    A list of the weather ID can be found here:
-    https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
-
-    Args:
-        weather_id (int): The weather ID received from the OWM API.
-
-    Returns:
-        str: An emoji corresponding to the weather ID.
-    """
     # Weather ID reference:
     THUNDERSTORM = range(200, 300)
     DRIZZLE = range(300, 400)
@@ -106,3 +123,41 @@ def get_weather_emoji(weather_id):
         emoji = "🌈"
 
     return emoji
+
+
+def generate_final_message(city):
+    data = generate_data(city)
+    if data is False:
+        return data
+    city_name, weather_emoji, temp, humidity, wind_speed, weather = data
+
+    message = f"""Showing temperature for {city_name}:
+
+Today's weather is {weather_emoji}\t{weather}, with temperatures at {round(temp)} degrees Celcius.
+
+Wind speeds is {wind_speed} km/h.
+Humidity is {humidity}%."""
+    return message
+
+
+def generate_geocords(city):
+    city_name, country = city.split(",")
+    GEO_API = "http://api.openweathermap.org/geo/1.0/direct"
+    geo_params = {
+        "appid": api_key,
+        "q": f"{city_name.strip()}, {country.strip()}",
+    }
+
+    r = requests.get(GEO_API, params=geo_params)
+
+    response = r.json()
+
+    if len(response) == 0:
+        return False
+    else:
+        print(response)
+        result = response[0]
+        lat = float(result["lat"])
+        lon = float(result["lon"])
+
+    return [lat, lon]
