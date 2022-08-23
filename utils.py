@@ -21,9 +21,9 @@ def handle_message(user_id, user_message):
 
         match user_command:
             case "/xkcd":
-                returned_message = xkcd_fetch.fetcher(user_message)
+                returned_object = xkcd_fetch.fetcher(user_message)
             case "/weather":
-                returned_message = weather.weather_fetch(user_message)
+                returned_object = weather.weather_fetch(user_message)
 
 
 def handle_postback(user_id, postback_event):
