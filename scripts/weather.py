@@ -1,5 +1,4 @@
 import os
-import sys
 
 import requests
 from dotenv import load_dotenv
@@ -10,11 +9,10 @@ api_key = os.getenv("WEATHER_API_KEY", None)
 
 
 def main():
-    print(f"API Key: {api_key}")
-    print(weather_fetch(input("Enter city: ").strip()))
+    pass
 
 
-def weather_fetch(city):
+def weather_fetch(user_input):
     """Fetches the current weather of an user-inputted city.
 
     Args:
@@ -24,6 +22,12 @@ def weather_fetch(city):
     Returns:
         string: A formatted message of the current weather of given city.
     """
+    command_args = user_input.split(" ", 1)
+    print(command_args)
+    if len(command_args) == 2:
+        city = command_args[1]
+    else:
+        return "Too many arguments!"
 
     coords = city_coords_fetch(city)
 
@@ -71,9 +75,7 @@ def city_coords_fetch(city):
         list: Contains the latitude and longitude of the inputted city.
     """
     try:
-        print(city)
         city_name, country = city.split(",")
-        print(f"{city_name}\t{country}")
     except ValueError:
         return "Err-Wrong-Format"
     GEO_API = "http://api.openweathermap.org/geo/1.0/direct"
@@ -93,8 +95,8 @@ def city_coords_fetch(city):
         result = response[
             0
         ]  # Since we asked the user to input the city based on the syntax, we only need the first one.
-        lat = round(float(result["lat"]), 2)
-        lon = round(float(result["lon"]), 2)
+        lat = float(result["lat"])
+        lon = float(result["lon"])
 
     return [lat, lon]
 
@@ -150,9 +152,9 @@ def call_weather_api(lat, lon):
     weather_id = int(response["weather"][0]["id"])
     weather_emoji = get_weather_emoji(weather_id)
     data_nums = response["main"]
-    temp = data_nums["temp"]
+    temp = round(data_nums["temp"])
     humidity = data_nums["humidity"]
-    wind_speed = response["wind"]["speed"]
+    wind_speed = round(response["wind"]["speed"], 1)
     weather = response["weather"][0]["description"]
 
     data = [city_name, weather_emoji, temp, humidity, wind_speed, weather]
