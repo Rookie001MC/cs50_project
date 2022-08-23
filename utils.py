@@ -1,13 +1,13 @@
+import os
 import re
 
 import requests
 from flask import Response
 
-import global_vars
-from scripts import xkcd_fetch
+from scripts import weather, xkcd_fetch
 
-verify_token = global_vars.verify_token
-access_token = global_vars.access_token
+verify_token = os.getenv("VERIFY_TOKEN", None)
+access_token = os.getenv("ACCESS_TOKEN", None)
 
 
 def main():
@@ -21,7 +21,9 @@ def handle_message(user_id, user_message):
 
         match user_command:
             case "/xkcd":
-                xkcd_fetch.fetcher(user_message)
+                returned_message = xkcd_fetch.fetcher(user_message)
+            case "/weather":
+                returned_message = weather.weather_fetch(user_message)
 
 
 def handle_postback(user_id, postback_event):
