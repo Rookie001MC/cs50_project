@@ -15,22 +15,26 @@ TEST_CASES = [
 
 def test_with_slash_commands():
     input = TEST_CASES[3]
-    assert weather_fetch(input[0]) == generate_final_message(input[0])
+    res_object = weather_fetch(input[0])
+    message = res_object["text"]
+    assert message == generate_final_message(input[0])
 
 
 def test_invalid_city_format_with_slash_commands():
     input = "/weather wfjioawiopnvoirwnveraiourgvbaesvesiaobaesiorbnverpioubnv"
-    assert (
-        weather_fetch(input)
-        == "Invalid format! Must be (City name-Country in 2 letters)"
-    )
+    res_object = weather_fetch(input)
+    message = res_object["text"]
+    assert message == "Invalid format! Must be (City name-Country in 2 letters)"
 
 
 def test_no_city_found_with_slash_commands():
     input = "/weather injfaopsenmfi, fe"
-    assert weather_fetch(input) == "City does not exist!"
+    res_object = weather_fetch(input)
+    message = res_object["text"]
+    assert message == "City does not exist!"
 
 
+#  Annoyingly, the data changes so much that it sometimes invalidates everything else.
 def test_data():
     input = TEST_CASES[0]
     assert call_weather_api(input[1], input[2]) == generate_data(input[0])
@@ -56,6 +60,7 @@ def test_no_city():
     assert city_coords_fetch(input) == False
 
 
+# Testing utilities
 def generate_data(city):
     global api_key
     api_key = os.getenv("WEATHER_API_KEY", None)
@@ -131,12 +136,7 @@ def generate_final_message(city):
         return data
     city_name, weather_emoji, temp, humidity, wind_speed, weather = data
 
-    message = f"""Showing temperature for {city_name}:
-
-Today's weather is {weather_emoji}\t{weather}, with temperatures at {round(temp)} degrees Celcius.
-
-Wind speeds is {wind_speed} km/h.
-Humidity is {humidity}%."""
+    message = f"""Showing temperature for {city_name}:\nToday's weather is {weather_emoji}\t{weather}, with temperatures at {round(temp)} degrees Celcius.\nWind speeds is {wind_speed} km/h.\nHumidity is {humidity}%."""
     return message
 
 
