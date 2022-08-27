@@ -5,7 +5,7 @@ import requests
 from dotenv import load_dotenv
 from flask import Flask, Response, render_template, request
 
-from utils import handle_message, handle_postback
+from utils import call_sendAPI, handle_message, handle_postback
 
 app = Flask(__name__)
 
@@ -47,26 +47,33 @@ def webhook_handler():
             sender_psid = webhook_event["sender"]["id"]
 
             if webhook_event["message"]:
-                handle_message(sender_psid, webhook_event["message"])
+                final_request = handle_message(webhook_event["message"])
             elif webhook_event["postback"]:
-                handle_postback(sender_psid, webhook_event["postback"])
+                final_request = handle_postback(webhook_event["postback"])
+        call_sendAPI(sender_psid, final_request)
         return Response(status=200, response="EVENT_RECEIVED")
     else:
         return Response(status=404)
 
 
-@app.route("/webhook_dev")
+@app.route("/webhook_dev", methods=["POST"])
 def webhook_dev():
-    body = json.loads(request.data.decode("utf-8"))
+    try:
+        body = json.loads(request.data.decode("utf-8"))
+    except json.decoder.JSONDecodeError as e:
+        return Response(status=400, response=f"JSON request error: \n<b><i>{e}</i></b>")
     for entry in body["entry"]:
         webhook_event = entry["messaging"][0]
         sender_psid = webhook_event["sender"]["id"]
 
         if webhook_event["message"]:
-            handle_message(sender_psid, webhook_event["message"])
+            final_request = handle_message(webhook_event["message"])
         elif webhook_event["postback"]:
-            handle_postback(sender_psid, webhook_event["postback"])
-    return Response(status=200, response="EVENT_RECEIVED")
+            final_request = handle_postback(webhook_event["postback"])
+
+    return Response(
+        status=200, response=json.dumps(final_request), mimetype="application/json"
+    )
 
 
 @app.route("/profile")

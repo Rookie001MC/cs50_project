@@ -24,29 +24,30 @@ def weather_fetch(user_input):
     """
     command_args = user_input.split(" ", 1)
     print(command_args)
-    if len(command_args) == 2:
-        city = command_args[1]
-    else:
+    if len(command_args) <= 1:
+        message = "Too few arguments!"
+    elif len(command_args) > 2:
         message = "Too many arguments!"
-
-    coords = city_coords_fetch(city)
-
-    if coords is False:
-        message = "City does not exist!"
-    elif coords == "Err-Wrong-Format":
-        message = "Invalid format! Must be (City name-Country in 2 letters)"
     else:
-        lat, lon = coords
-        (
-            city_name,
-            weather_emoji,
-            temp,
-            humidity,
-            wind_speed,
-            weather,
-        ) = call_weather_api(lat, lon)
+        city = command_args[1]
+        coords = city_coords_fetch(city)
 
-        message = f"""Showing temperature for {city_name}:\nToday's weather is {weather_emoji}\t{weather}, with temperatures at {round(temp)} degrees Celcius.\nWind speeds is {wind_speed} km/h.\nHumidity is {humidity}%."""
+        if coords is False:
+            message = "City does not exist!"
+        elif coords == "Err-Wrong-Format":
+            message = "Invalid format! Must be (City name-Country in 2 letters)"
+        else:
+            lat, lon = coords
+            (
+                city_name,
+                weather_emoji,
+                temp,
+                humidity,
+                wind_speed,
+                weather,
+            ) = call_weather_api(lat, lon)
+
+            message = f"""Showing temperature for {city_name}:\nToday's weather is {weather_emoji}\t{weather}, with temperatures at {round(temp)} degrees Celcius.\nWind speeds is {wind_speed} km/h.\nHumidity is {humidity}%."""
 
     response = {"text": message}
     return response

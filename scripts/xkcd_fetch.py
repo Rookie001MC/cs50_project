@@ -2,8 +2,8 @@ import xkcd
 
 
 def fetcher(user_input):
-    commands = user_input.split()
-
+    commands = user_input.split(" ")
+    print(commands)
     if len(commands) == 1 or commands[1] == "latest":
         latest = xkcd.getLatestComic()
         info = info_getter(latest)

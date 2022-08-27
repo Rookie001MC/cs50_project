@@ -14,16 +14,28 @@ def main():
     print("There's nothing here ¯\_(ツ)_/¯")
 
 
-def handle_message(user_id, user_message):
+def handle_message(user_message):
     if user_message["text"]:
         re_object = re.search(r"(\/[\w]+)", user_message["text"])
-        user_command = re_object.group()
+        if re_object is not None:
+            user_command = re_object.group()
+            full_command = user_message["text"]
 
-        match user_command:
-            case "/xkcd":
-                returned_object = xkcd_fetch.fetcher(user_message)
-            case "/weather":
-                returned_object = weather.weather_fetch(user_message)
+            match user_command:
+                case "/xkcd":
+                    returned_object = xkcd_fetch.fetcher(full_command)
+                case "/weather":
+                    returned_object = weather.weather_fetch(full_command)
+                case _:
+                    returned_object = {
+                        "text": "Sorry, but this command does not exist.\n¯\_(ツ)_/¯"
+                    }
+        else:
+            returned_object = {
+                "text": f"If you're trying to send me some random text, I'm sorry, cause I'm dumb.\n¯\_(ツ)_/¯"
+            }
+
+    return returned_object
 
 
 def handle_postback(user_id, postback_event):
