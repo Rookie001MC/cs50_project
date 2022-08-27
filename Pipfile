@@ -10,6 +10,7 @@ requests = "*"
 xkcd = "*"
 pytest = "*"
 pytest-randomly = "*"
+djlint = "*"
 
 [dev-packages]
 black = "*"
