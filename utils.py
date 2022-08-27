@@ -1,5 +1,6 @@
 import os
 import re
+from time import sleep
 
 import requests
 from flask import Response
@@ -22,6 +23,10 @@ def handle_message(user_message):
             full_command = user_message["text"]
 
             match user_command:
+                case "/help":
+                    returned_object = {
+                        "text": f"Available commands:\n\n - /xkcd [random/latest/(any number)]: Gets a XKCD webcomic 📖. Leave blank for the latest comic.\n- /weather <city>: Show current weather for the provided city ☀️."
+                    }
                 case "/xkcd":
                     returned_object = xkcd_fetch.fetcher(full_command)
                 case "/weather":
@@ -38,8 +43,22 @@ def handle_message(user_message):
     return returned_object
 
 
-def handle_postback(user_id, postback_event):
-    pass
+def handle_postback(sender_psid, postback_event):
+    payload = postback_event["payload"]
+
+    if payload == "GET_STARTED_PAYLOAD":
+        welcome_messages = [
+            "Hello there! This is Rookie's CS50 Python Project - a chatbot written in Python and Flask.",
+            "Currently there are 2 available commands: ",
+            "- /xkcd [random/latest/(any number)]: 📖 Gets a XKCD webcomic. Leave blank for the latest comic.",
+            "- /weather <city>: 🌥️ Gets the current weather of a given city. \nThe format must be (City name, Country in 2 letters.)",
+            "More features will be added in the upcoming months, provided if I have more free time as I'm in the process of applying to University.",
+        ]
+
+        for message in welcome_messages:
+            response = {"text": message}
+            call_sendAPI(sender_psid, response)
+            sleep(5)
 
 
 def call_sendAPI(sender_psid, response):
