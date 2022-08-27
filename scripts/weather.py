@@ -21,6 +21,11 @@ def weather_fetch(user_input):
 
     Returns:
         string: A formatted message of the current weather of given city.
+        Message can be changed depending on the input:
+        - Too many/few arguments.
+        - City not found.
+        - Invalid format
+        - The weather itself.
     """
     command_args = user_input.split(" ", 1)
     print(command_args)
@@ -72,10 +77,10 @@ def city_coords_fetch(city):
 
     Raises:
         ValueError: When the inputted city does not match the format.
-        AttributeError: When there is no result.
 
     Returns:
         list: Contains the latitude and longitude of the inputted city.
+        False: If there is no result.
     """
     try:
         city_name, country = city.split(",")
@@ -145,6 +150,22 @@ def get_weather_emoji(weather_id):
 
 
 def call_weather_api(lat, lon):
+    """Calls the weather api and gathers the relevant informations of
+    the weather.
+
+    Args:
+        lat (float): Latitude of the given city
+        lon (float): Longtitude of the given city
+
+    Returns:
+        list: Contains the data of:
+        - City name
+        - An emoji matches the weather
+        - Temperature in Celcius
+        - Humidity
+        - Wind speed in km/h
+        - Current weather.
+    """
     API_URL = "https://api.openweathermap.org/data/2.5/weather"
     api_params = {"appid": api_key, "lat": lat, "lon": lon, "units": "metric"}
     r = requests.get(API_URL, params=api_params)
