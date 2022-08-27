@@ -52,6 +52,9 @@ def weather_fetch(user_input):
                 weather,
             ) = call_weather_api(lat, lon)
 
+            # I actually hate this, but for some reason, if I use docstrings for this,
+            # it actually automatically adds spaces in front of each line.
+            # For now, the safest way is just to do this instead.
             message = f"""Showing temperature for {city_name}:\nToday's weather is {weather_emoji}\t{weather}, with temperatures at {round(temp)} degrees Celcius.\nWind speeds is {wind_speed} km/h.\nHumidity is {humidity}%."""
 
     response = {"text": message}
@@ -86,6 +89,7 @@ def city_coords_fetch(city):
         city_name, country = city.split(",")
     except ValueError:
         return "Err-Wrong-Format"
+
     GEO_API = "http://api.openweathermap.org/geo/1.0/direct"
     geo_params = {
         "appid": api_key,
@@ -99,10 +103,8 @@ def city_coords_fetch(city):
     if len(response) == 0:
         return False
     else:
-        print(response)
-        result = response[
-            0
-        ]  # Since we asked the user to input the city based on the syntax, we only need the first one.
+        # Since we asked the user to input the city based on the syntax, we only need the first one.
+        result = response[0]
         lat = float(result["lat"])
         lon = float(result["lon"])
 
