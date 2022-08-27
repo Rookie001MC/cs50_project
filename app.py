@@ -7,12 +7,22 @@ from flask import Flask, Response, render_template, request
 
 from utils import call_sendAPI, handle_message, handle_postback
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder="web/static",
+    template_folder="web/templates",
+    static_url_path="",
+)
 
 load_dotenv("./env")
 
 verify_token = os.getenv("VERIFY_TOKEN", None)
 access_token = os.getenv("ACCESS_TOKEN", None)
+
+
+@app.route("/", methods=["GET"])
+def index():
+    return render_template("index.html")
 
 
 @app.route("/webhook", methods=["GET"])
