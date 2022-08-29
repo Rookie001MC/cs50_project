@@ -1,9 +1,8 @@
+import datetime
 import os
 
 import requests
-from dotenv import load_dotenv
 
-load_dotenv("../.env")
 global api_key
 api_key = os.getenv("WEATHER_API_KEY", None)
 
@@ -50,12 +49,17 @@ def weather_fetch(user_input):
                 humidity,
                 wind_speed,
                 weather,
+                timezone,
             ) = call_weather_api(lat, lon)
 
-            # I actually hate this, but for some reason, if I use docstrings for this,
-            # it actually automatically adds spaces in front of each line.
-            # For now, the safest way is just to do this instead.
-            message = f"""Showing temperature for {city_name}:\nToday's weather is {weather_emoji}\t{weather}, with temperatures at {round(temp)} degrees Celcius.\nWind speeds is {wind_speed} km/h.\nHumidity is {humidity}%."""
+            message = f"""Showing the weather for {city_name}:
+
+Local time: {timezone}.
+
+Current weather is {weather_emoji} {weather}, with a temperature of {round(temp)}⁰C.
+
+Wind speed is {wind_speed} km/h.
+Humidity is {humidity}%"""
 
     response = {"text": message}
     return response
@@ -99,7 +103,6 @@ def city_coords_fetch(city):
     r = requests.get(GEO_API, params=geo_params)
 
     response = r.json()
-
     if len(response) == 0:
         return False
     else:
@@ -182,10 +185,18 @@ def call_weather_api(lat, lon):
     humidity = data_nums["humidity"]
     wind_speed = round(response["wind"]["speed"], 1)
     weather = response["weather"][0]["description"]
+    timezone = f"{get_date(response['timezone'])}"
 
-    data = [city_name, weather_emoji, temp, humidity, wind_speed, weather]
+    data = [city_name, weather_emoji, temp, humidity, wind_speed, weather, timezone]
 
     return data
+
+
+def get_date(timezone):
+    tz = datetime.timezone(datetime.timedelta(seconds=int(timezone)))
+    return datetime.datetime.now(tz=tz).strftime(
+        "%d/%m/%Y, %H:%M"
+    )  # strftime is just for visually formatting the datetime object
 
 
 if __name__ == "__main__":
