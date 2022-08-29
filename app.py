@@ -110,6 +110,26 @@ def profile_setup():
                 "text": "Đây là 1 con Chatbot, được viết bằng Flask, dành cho dự án của khoá học CS50 Python.",
             },
         ],
+        "persistent_menu": [
+            {
+                "locale": "default",
+                "composer_input_disabled": False,
+                "call_to_actions": [
+                    {
+                        "type": "web_url",
+                        "title": "My Personal Facebook",
+                        "url": "https://www.facebook.com/RealRookie001/",
+                        "webview_height_ratio": "full",
+                    },
+                    {
+                        "type": "web_url",
+                        "title": "My Personal Instagram",
+                        "url": "https://www.instagram.com/RealRookie001/",
+                        "webview_height_ratio": "full",
+                    },
+                ],
+            }
+        ],
         "get_started": {"payload": "GET_STARTED_PAYLOAD"},
     }
     try:
