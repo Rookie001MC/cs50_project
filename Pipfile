@@ -11,6 +11,7 @@ xkcd = "*"
 pytest = "*"
 pytest-randomly = "*"
 djlint = "*"
+pytest-html = "*"
 
 [dev-packages]
 black = "*"
@@ -20,3 +21,7 @@ python_version = "3.10"
 
 [pipenv]
 allow_prereleases = true
+
+[scripts]
+test = "python -m pytest -vvv ."
+start_app = "python app.py"
