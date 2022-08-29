@@ -31,7 +31,6 @@ def webhook_verify():
     Webhook verification for the bot.
     https://developers.facebook.com/docs/messenger-platform/webhooks
     """
-
     mode = request.args.get("hub.mode")
     token = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
@@ -41,7 +40,11 @@ def webhook_verify():
             print("WEBHOOK_VERIFIED")
             return Response(status=200, response=challenge)
         else:
-            return Response(status=403)
+            return Response(status=403, response="Wrong verify token.")
+    else:
+        return Response(
+            status=403, response="Not enough data was given in the GET request."
+        )
 
 
 @app.route("/webhook", methods=["POST"])
@@ -50,18 +53,22 @@ def webhook_handler():
     Handle message events sent to the bot.
     """
     body = json.loads(request.data.decode("utf-8"))
+    if body:
+        if body["object"] == "page":
+            for entry in body["entry"]:
+                webhook_event = entry["messaging"][0]
+                sender_psid = webhook_event["sender"]["id"]
 
-    if body["object"] == "page":
-        for entry in body["entry"]:
-            webhook_event = entry["messaging"][0]
-            sender_psid = webhook_event["sender"]["id"]
-
-            if webhook_event["message"]:
-                final_request = handle_message(webhook_event["message"])
-                call_sendAPI(sender_psid, final_request)
-            elif webhook_event["postback"]:
-                final_request = handle_postback(sender_psid, webhook_event["postback"])
-        return Response(status=200, response="EVENT_RECEIVED")
+                if webhook_event["message"]:
+                    final_request = handle_message(webhook_event["message"])
+                    call_sendAPI(sender_psid, final_request)
+                elif webhook_event["postback"]:
+                    final_request = handle_postback(
+                        sender_psid, webhook_event["postback"]
+                    )
+            return Response(status=200, response="EVENT_RECEIVED")
+        else:
+            return Response(status=404)
     else:
         return Response(status=404)
 
