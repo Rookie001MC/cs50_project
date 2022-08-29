@@ -8,13 +8,13 @@ flask = "*"
 python-dotenv = "*"
 requests = "*"
 xkcd = "*"
+
+[dev-packages]
+black = "*"
 pytest = "*"
 pytest-randomly = "*"
 djlint = "*"
 pytest-html = "*"
-
-[dev-packages]
-black = "*"
 
 [requires]
 python_version = "3.10"
