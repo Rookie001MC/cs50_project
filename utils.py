@@ -58,7 +58,7 @@ def handle_postback(sender_psid, postback_event):
         for message in welcome_messages:
             response = {"text": message}
             call_sendAPI(sender_psid, response)
-            sleep(5)
+            sleep(2)
 
 
 def call_sendAPI(sender_psid, response):
