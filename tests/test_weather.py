@@ -1,7 +1,6 @@
-import json
+import datetime
 import os
 
-import pytest
 import requests
 from scripts.weather import call_weather_api, city_coords_fetch, weather_fetch
 
@@ -92,9 +91,11 @@ def generate_data(city):
         weather = z[0]["description"]
         weather_id = z[0]["id"]
 
+        timezone = f"{get_date(x['timezone'])}"
+
         weather_emoji = get_weather_emoji(weather_id)
 
-        data = [city_name, weather_emoji, temp, humidity, wind_speed, weather]
+        data = [city_name, weather_emoji, temp, humidity, wind_speed, weather, timezone]
         return data
     else:
         return False
@@ -134,9 +135,16 @@ def generate_final_message(city):
     data = generate_data(city)
     if data is False:
         return data
-    city_name, weather_emoji, temp, humidity, wind_speed, weather = data
+    city_name, weather_emoji, temp, humidity, wind_speed, weather, timezone = data
 
-    message = f"""Showing temperature for {city_name}:\nToday's weather is {weather_emoji}\t{weather}, with temperatures at {round(temp)} degrees Celcius.\nWind speeds is {wind_speed} km/h.\nHumidity is {humidity}%."""
+    message = f"""Showing the weather for {city_name}:
+
+Local time: {timezone}.
+
+Current weather is {weather_emoji} {weather}, with a temperature of {round(temp)}⁰C.
+
+Wind speed is {wind_speed} km/h.
+Humidity is {humidity}%"""
     return message
 
 
@@ -161,3 +169,10 @@ def generate_geocords(city):
         lon = float(result["lon"])
 
     return [lat, lon]
+
+
+def get_date(timezone):
+    tz = datetime.timezone(datetime.timedelta(seconds=int(timezone)))
+    return datetime.datetime.now(tz=tz).strftime(
+        "%d/%m/%Y, %H:%M"
+    )  # strftime is just for visually formatting the datetime object
