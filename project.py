@@ -137,9 +137,6 @@ def profile_setup():
 
         if r.status_code == 200:
             return f"<p>Successfully setup profile!</p>"
-        elif r.status_code >= 500:
-            print(f"Request failed: {r.text}")
-            return f"<p>Profile setup failed! Please check console for details.</p>"
         elif r.status_code >= 400:
             print(f"Request failed: {r.text}")
             return f"<p>Profile setup failed! Please check console for details.</p>"
