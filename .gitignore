@@ -175,3 +175,5 @@ cython_debug/
 *.vsix
 
 ngrok.exe
+report.html
+.vscode/launch.json
