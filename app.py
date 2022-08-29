@@ -58,14 +58,13 @@ def webhook_handler():
             for entry in body["entry"]:
                 webhook_event = entry["messaging"][0]
                 sender_psid = webhook_event["sender"]["id"]
+                print(webhook_event)
 
-                if webhook_event["message"]:
+                if "message" in webhook_event:
                     final_request = handle_message(webhook_event["message"])
                     call_sendAPI(sender_psid, final_request)
-                elif webhook_event["postback"]:
-                    final_request = handle_postback(
-                        sender_psid, webhook_event["postback"]
-                    )
+                elif "postback" in webhook_event:
+                    handle_postback(sender_psid, webhook_event["postback"])
             return Response(status=200, response="EVENT_RECEIVED")
         else:
             return Response(status=404)
@@ -82,18 +81,18 @@ def webhook_dev():
     for entry in body["entry"]:
         webhook_event = entry["messaging"][0]
         sender_psid = webhook_event["sender"]["id"]
-
-        if webhook_event["message"]:
+        print(webhook_event)
+        if "message" in webhook_event:
             final_request = handle_message(webhook_event["message"])
-        elif webhook_event["postback"]:
-            final_request = handle_postback(webhook_event["postback"])
+        elif "postback" in webhook_event:
+            final_request = handle_postback(sender_psid, webhook_event["postback"])
 
     return Response(
         status=200, response=json.dumps(final_request), mimetype="application/json"
     )
 
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET"])
 def profile_setup():
     """
     Setup the bot using the Messenger Profile API.
@@ -101,28 +100,27 @@ def profile_setup():
 
     profile_url = f"https://graph.facebook.com/v14.0/me/messenger_profile?access_token={access_token}"
     profile = {
-        "data": [
+        "greeting": [
             {
-                "greeting": [
-                    {
-                        "locale": "default",
-                        "text": "This is a simple Chatbot, written in Flask, for CS50 Python.",
-                    },
-                    {
-                        "locale": "vi_VN",
-                        "text": "Đây là 1 con Chatbot, được viết bằng Flask, dành cho dự án của khoá học CS50 Python.",
-                    },
-                ],
-                "get_started": {"payload": "GET_STARTED_PAYLOAD"},
-            }
-        ]
+                "locale": "default",
+                "text": "This is a simple Chatbot, written in Flask, for CS50 Python.",
+            },
+            {
+                "locale": "vi_VN",
+                "text": "Đây là 1 con Chatbot, được viết bằng Flask, dành cho dự án của khoá học CS50 Python.",
+            },
+        ],
+        "get_started": {"payload": "GET_STARTED_PAYLOAD"},
     }
     try:
         r = requests.post(url=profile_url, json=profile)
 
         if r.status_code == 200:
             return f"<p>Successfully setup profile!</p>"
-        elif r.status_code > 500:
+        elif r.status_code >= 500:
+            print(f"Request failed: {r.text}")
+            return f"<p>Profile setup failed! Please check console for details.</p>"
+        elif r.status_code >= 400:
             print(f"Request failed: {r.text}")
             return f"<p>Profile setup failed! Please check console for details.</p>"
 
