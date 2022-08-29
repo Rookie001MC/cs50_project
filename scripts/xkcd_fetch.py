@@ -19,12 +19,10 @@ def fetcher(user_input):
 
     if len(info) == 2:
         response = {
-            "text": info[0],
             "attachment": {
                 "type": "image",
                 "payload": {
                     "url": info[1],
-                    "is_resuable": True,
                 },
             },
         }
