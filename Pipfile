@@ -24,4 +24,4 @@ allow_prereleases = true
 
 [scripts]
 test = "python -m pytest -vvv ."
-start_app = "python app.py"
+dev_server = "python project.py"
