@@ -61,6 +61,9 @@ def test_no_city():
 
 # Testing utilities
 def generate_data(city):
+    """Another implementation for fetching data from OpenWeathermap.
+    https://www.geeksforgeeks.org/python-find-current-weather-of-any-city-using-openweathermap-api/
+    """
     global api_key
     api_key = os.getenv("WEATHER_API_KEY", None)
     if "/" in city:
@@ -102,6 +105,10 @@ def generate_data(city):
 
 
 def get_weather_emoji(weather_id):
+    """Returns an emoji corresponding to the weather ID.
+    Reference code: https://realpython.com/build-a-python-weather-app-cli/#format-weather-types-in-different-colors
+    Weather ID Reference: https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+    """
     # Weather ID reference:
     THUNDERSTORM = range(200, 300)
     DRIZZLE = range(300, 400)

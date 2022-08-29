@@ -56,7 +56,7 @@ def weather_fetch(user_input):
 
 Local time: {timezone}.
 
-Current weather is {weather_emoji} {weather}, with a temperature of {round(temp)}⁰C.
+Current weather is {weather_emoji} {weather}, with a temperature of {(temp)}⁰C.
 
 Wind speed is {wind_speed} km/h.
 Humidity is {humidity}%"""
@@ -115,9 +115,11 @@ def city_coords_fetch(city):
 
 
 def get_weather_emoji(weather_id):
-    """Returns the emoji corresponding to the weather ID.
+    """Returns an emoji corresponding to the weather ID.
     A list of the weather ID can be found here:
     https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+
+    Reference code: https://realpython.com/build-a-python-weather-app-cli/#format-weather-types-in-different-colors
 
     Args:
         weather_id (int): The weather ID received from the OWM API.
@@ -193,10 +195,17 @@ def call_weather_api(lat, lon):
 
 
 def get_date(timezone):
+    """Gets the local time of the inputted city.
+    Reference: https://stackoverflow.com/a/67031211
+
+    Args:
+        timezone (int): Timezone offset in UTC
+
+    Returns:
+        string: Local time in format: day/month/year, hours(24)/minutes
+    """
     tz = datetime.timezone(datetime.timedelta(seconds=int(timezone)))
-    return datetime.datetime.now(tz=tz).strftime(
-        "%d/%m/%Y, %H:%M"
-    )  # strftime is just for visually formatting the datetime object
+    return datetime.datetime.now(tz=tz).strftime("%d/%m/%Y, %H:%M")
 
 
 if __name__ == "__main__":
