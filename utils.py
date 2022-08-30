@@ -37,7 +37,7 @@ def handle_message(user_message):
                     }
         else:
             returned_object = {
-                "text": f"If you're trying to send me some random text, I'm sorry, cause I'm dumb.\n¯\_(ツ)_/¯"
+                "text": "If you're trying to send me some random text, I'm sorry, cause I'm dumb.\n¯\_(ツ)_/¯"
             }
 
     return returned_object
