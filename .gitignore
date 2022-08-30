@@ -161,6 +161,7 @@ cython_debug/
 #.idea/
 
 # VSCode
+**/.vscode/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -176,4 +177,3 @@ cython_debug/
 
 ngrok.exe
 report.html
-.vscode/launch.json
