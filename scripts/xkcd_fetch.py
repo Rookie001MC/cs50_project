@@ -11,21 +11,36 @@ def fetcher(user_input):
         dict: a response object to be sent back to the `handle_message` function for processing and sending to FB.
     """
     commands = user_input.split(" ")
-    print(commands)
-    if len(commands) == 1 or commands[1] == "latest":
-        latest = xkcd.getLatestComic()
-        comic_url = get_image_url(latest)
-    elif commands[1] == "random":
-        random = xkcd.getRandomComic()
-        comic_url = get_image_url(random)
-    else:
-        try:
-            specific = xkcd.getComic(int(commands[1]))
-            comic_url = get_image_url(specific)
-        except ValueError:
-            comic_url = "Invalid comic number or subcommand!"
+    found = True
+    if len(commands) == 1:
+        comic_url = xkcd.getLatestComic().getImageLink()
 
-    if comic_url:
+    elif len(commands) == 2:
+        subcommand = commands[1]
+        if subcommand == "latest":
+            comic_url = xkcd.getLatestComic().getImageLink()
+
+        elif subcommand == "random":
+            comic_url = xkcd.getRandomComic().getImageLink()
+
+        else:
+            try:
+                input_comic_num = int(subcommand)
+            except ValueError:
+                comic_url = "Invalid comic number or subcommand!"
+                found = False
+            else:
+                if 1 <= input_comic_num <= xkcd.getLatestComicNum():
+                    comic_url = xkcd.getComic(input_comic_num).getImageLink()
+                else:
+                    comic_url = f"Your requested comic, number {input_comic_num}, does not exist!"
+                    found = False
+
+    elif len(commands) > 2:
+        comic_url = "Too many arguments!"
+        found = False
+
+    if found is True:
         response = {
             "attachment": {
                 "type": "image",
@@ -40,23 +55,6 @@ def fetcher(user_input):
         }
 
     return response
-
-
-def get_image_url(comic):
-    """Fetches the image of a given comic.
-
-    Args:
-        comic (object): An `xkcd.Comic` object as requested by the user.
-
-    Returns:
-        str: The url of the comic.
-    """
-    try:
-        image_url = comic.getImageLink()
-    except AttributeError:
-        return "An error occured, there may be a connection error, or you must have given a non-existant comic!"
-    else:
-        return image_url
 
 
 """
