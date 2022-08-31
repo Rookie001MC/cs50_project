@@ -44,3 +44,11 @@ Currently it is set up with a Get Started button, a Greeting text, and a Persist
 
 ## Things that I still don't feel right with the app
 Though I am still an amateur programmer, there were so many design choices that I feel like it's not right. 
+Some of these include:
+
+- Forcing users to type subcommands, instead of letting them type the command, then wait for additional input. This can be seen clearly in the [`weather`](./scripts/weather.py) script, where they have to type the entire long command by themselves.
+- Not allowing for multiple calls to the Send API. 
+  - The current implementation of the Get Started button payload is that it sends all messages in a `for` loop, then delays for 2 seconds, then responds with a `200` code. I thought it would have been fine.
+  - However, the Send API expects the `200` to be sent in a 20-second window. This implementation actually took **~17 seconds** to send a `200`! 
+  - Were I to, in the future, add more messages, or execute a request, which would exceed the 20 seconds limit, that would cause quite a problem.
+- 
