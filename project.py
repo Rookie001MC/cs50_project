@@ -69,7 +69,7 @@ def webhook_handler():
         else:
             return Response(status=404)
     else:
-        return Response(status=404)
+        return Response(status=400)
 
 
 @app.route("/webhook_dev", methods=["POST"])
