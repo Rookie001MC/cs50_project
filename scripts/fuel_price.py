@@ -43,9 +43,9 @@ def table_parsing(table):
         columns = row.find_all("td")
 
         if columns != []:
-            product.append(columns[1].text.strip())
+            product.append(translate_fuel_names(columns[1].text.strip()))
             price.append(columns[2].text.strip())
-            offset.append(columns[3].text.strip())
+            offset.append(int(columns[3].text.strip()))
 
     df = pd.DataFrame(
         {"product": product, "price": price, "offset_by_previous": offset}
@@ -68,6 +68,16 @@ def translate_fuel_names(product):
         return TRANSLATIONS[product]
 
 
+def offset_price_emoji(offset_price):
+    if offset_price == 0:
+        return "steady price"
+    elif offset_price < 0:
+        offset_with_icon = f"⬇️ down {offset_price} dong/liter"
+    else:
+        offset_with_icon = f"⬆️ up {offset_price} dong/liter"
+    return offset_with_icon
+
+
 def create_response_object(data):
     if data is False:
         response = {"text": "Something has gone wrong!"}
@@ -77,7 +87,7 @@ def create_response_object(data):
         data_string = ""
 
         for product in fuel_data:
-            data_string += f"{product['product']}: {product['price']} dong/liter - {product['offset_by_previous']} dong/liter difference compared to last adjustment.\n"
+            data_string += f"{product['product']}: {product['price']} dong/liter - {offset_price_emoji(product['offset_by_previous'])} compared to last adjustment.\n"
 
         response = {
             "text": f"""Showing current Vietnam fuel prices:
