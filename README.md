@@ -1,26 +1,19 @@
-# PyBot
+# CS50 Python Project: Messenger Assisstant
 A simple Facebook Messenger Chatbot, powered by Flask.
 ## Video demo: [Here]()
 
 ## Table of content:
-
-## Setup commands:
-1. Install Pipenv:
-> `pip install pipenv`
-
-2. Install packages:
-> `pipenv install`
-
-3. (Optionally) Test the app:
-> `pipenv run test`
-
-4. Start the dev server:
-> `pipenv run dev_server`
-
-Deployment instructions coming soon.
+- [CS50 Python Project: Messenger Assisstant](#cs50-python-project-messenger-assisstant)
+  - [Video demo: Here](#video-demo-here)
+  - [Table of content:](#table-of-content)
+  - [Project structure](#project-structure)
+  - [`app.py` endpoints:](#apppy-endpoints)
+  - [Things that I still don't feel right with the app](#things-that-i-still-dont-feel-right-with-the-app)
+  - [What I learned from the project](#what-i-learned-from-the-project)
 ## Project structure
 - [`scripts`](./scripts/): These are the modules that powered the commands. Each modules corresponds to a command, as defined in [`utils.py`](./utils.py). 
 - [`tests`](./tests/): Unit test files. In addition to testing all the commands in `scripts`, it also tests for the endpoints (defined in [`app.py`](app.py)) and the utility functions (defined in [`utils.py`](utils.py)).
+  - **Note**: only the [`fuel_price script`](./scripts/fuel_price.py) does not have its test file. Apparently it is very hard to test web-scraping scripts, and even more so with sites with dynamic data.
 - [`web`](./web/): Mostly HTML files to serve the root endpoint. 
 - [`.env.example`](./.env.example): Example environment variable file, which is used to store secret API tokens.
 - [`.gitignore`](./.gitignore): Files specified here will be ignored by Git.
@@ -51,4 +44,23 @@ Some of these include:
   - The current implementation of the Get Started button payload is that it sends all messages in a `for` loop, then delays for 2 seconds, then responds with a `200` code. I thought it would have been fine.
   - However, the Send API expects the `200` to be sent in a 20-second window. This implementation actually took **~17 seconds** to send a `200`! 
   - Were I to, in the future, add more messages, or execute a request, which would exceed the 20 seconds limit, that would cause quite a problem.
-- 
+- Writing very ugly code, in my opinion. 
+  - Obviously I can't complain too much, I am still not very good at programming, but sometimes it's hard to follow.
+
+## What I learned from the project
+All of the not-great things aside, I learned a lot from developing the project, such as:
+- How to organize the project, time management,...
+- How to write better code and better tests
+- How to improve my problem solving
+- How to document my code more clearer
+- ...
+  
+In addition, I also learned a lot more things about Python, like:
+- How to setup and run a web application
+- How to use an API and process data from it
+- How to use BeautifulSoup4 to scrape the web when an API isn't available.
+- ...
+
+And so much more throughout the CS50 Python course. 
+
+I hope that in the future, I will be able to utilize what I have aquired from the course so that I can progress further into the future, be it at university, or in a career.
