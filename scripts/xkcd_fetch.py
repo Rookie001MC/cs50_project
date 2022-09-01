@@ -1,10 +1,6 @@
 import xkcd
 
 
-def main():
-    print(fetcher(input("Enter command: ")))
-
-
 def fetcher(user_input):
     """Process the inputted command and fetches the requested comic.
 
@@ -66,10 +62,14 @@ def fetcher(user_input):
 
 
 def info_getter(comic):
+    """Gets the alt_text and image_url of the provided comic object.
+
+    Args:
+        comic (Object): A Comic object based on user's input
+
+    Returns:
+        list: Containing alt_text and image_url of the comic.
+    """
     alt_text = comic.getAltText()
     image_url = comic.getImageLink()
     return [alt_text, image_url]
-
-
-if __name__ == "__main__":
-    main()
