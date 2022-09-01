@@ -62,7 +62,11 @@ def webhook_handler():
 
                 if "message" in webhook_event:
                     final_request = handle_message(webhook_event["message"])
-                    call_sendAPI(sender_psid, final_request)
+                    if isinstance(final_request, list) and len(final_request) >= 2:
+                        for messages in final_request:
+                            call_sendAPI(sender_psid, messages)
+                    else:
+                        call_sendAPI(sender_psid, final_request)
                 elif "postback" in webhook_event:
                     handle_postback(sender_psid, webhook_event["postback"])
             return Response(status=200, response="EVENT_RECEIVED")
