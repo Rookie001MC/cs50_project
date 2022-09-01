@@ -82,7 +82,7 @@ def call_sendAPI(sender_psid, response):
 
     try:
         r = requests.post(graphapi_url, json=payload)
-
+        print(f"\033[1;31m{r.text}")
     except requests.exceptions.HTTPError as err:
         print(f"Message failed to send: {err}")
         return Response(response=err, status=r.status_code)
