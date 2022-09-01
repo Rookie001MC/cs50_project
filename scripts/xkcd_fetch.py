@@ -1,6 +1,10 @@
 import xkcd
 
 
+def main():
+    print(fetcher(input("Enter command: ")))
+
+
 def fetcher(user_input):
     """Process the inputted command and fetches the requested comic.
 
@@ -13,51 +17,59 @@ def fetcher(user_input):
     commands = user_input.split(" ")
     found = True
     if len(commands) == 1:
-        comic_url = xkcd.getLatestComic().getImageLink()
-
+        comic_object = xkcd.getLatestComic()
     elif len(commands) == 2:
         subcommand = commands[1]
         if subcommand == "latest":
-            comic_url = xkcd.getLatestComic().getImageLink()
+            comic_object = xkcd.getLatestComic()
 
         elif subcommand == "random":
-            comic_url = xkcd.getRandomComic().getImageLink()
+            comic_object = xkcd.getRandomComic()
 
         else:
             try:
                 input_comic_num = int(subcommand)
             except ValueError:
-                comic_url = "Invalid comic number or subcommand!"
+                err_message = "Invalid comic number or subcommand!"
                 found = False
             else:
                 if 1 <= input_comic_num <= xkcd.getLatestComicNum():
-                    comic_url = xkcd.getComic(input_comic_num).getImageLink()
+                    comic_object = xkcd.getComic(input_comic_num)
                 else:
-                    comic_url = f"Your requested comic, number {input_comic_num}, does not exist!"
+                    err_message = f"Your requested comic, number {input_comic_num}, does not exist!"
                     found = False
 
     elif len(commands) > 2:
-        comic_url = "Too many arguments!"
+        err_message = "Too many arguments!"
         found = False
 
     if found is True:
-        response = {
-            "attachment": {
-                "type": "image",
-                "payload": {
-                    "url": comic_url,
+
+        alt_text, image_url = info_getter(comic_object)
+        response = [
+            {"text": alt_text},
+            {
+                "attachment": {
+                    "type": "image",
+                    "payload": {
+                        "url": image_url,
+                    },
                 },
             },
-        }
+        ]
     else:
         response = {
-            "text": comic_url,
+            "text": err_message,
         }
 
     return response
 
 
-"""
+def info_getter(comic):
+    alt_text = comic.getAltText()
+    image_url = comic.getImageLink()
+    return [alt_text, image_url]
+
+
 if __name__ == "__main__":
     main()
-"""

@@ -10,27 +10,33 @@ def test_random(monkeypatch):
     # https://github.com/cs50/problems/blob/2022/python/game/testing.py
     monkeypatch.setattr("random.randint", lambda a, b: 20)
     out_response = fetcher(f"/xkcd random")
-
-    image_url = out_response["attachment"]["payload"]["url"]
+    alt_text = out_response[0]["text"]
+    image_url = out_response[1]["attachment"]["payload"]["url"]
 
     assert image_url == xkcd.getRandomComic().getImageLink()
+    assert alt_text == xkcd.getRandomComic().getAltText()
 
 
 def test_latest():
     out_response = fetcher(f"/xkcd")
 
-    image_url = out_response["attachment"]["payload"]["url"]
+    alt_text = out_response[0]["text"]
+    image_url = out_response[1]["attachment"]["payload"]["url"]
 
     assert image_url == xkcd.getLatestComic().getImageLink()
+    assert alt_text == xkcd.getLatestComic().getAltText()
 
 
 def test_specific():
     comic_num = random.randint(1, xkcd.getLatestComicNum())
     out_response = fetcher(f"/xkcd {comic_num}")
     print(out_response)
-    image_url = out_response["attachment"]["payload"]["url"]
+
+    alt_text = out_response[0]["text"]
+    image_url = out_response[1]["attachment"]["payload"]["url"]
 
     assert image_url == xkcd.getComic(comic_num).getImageLink()
+    assert alt_text == xkcd.getComic(comic_num).getAltText()
 
 
 def test_out_of_bounds():
