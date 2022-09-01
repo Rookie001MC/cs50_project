@@ -8,6 +8,9 @@ flask = "*"
 python-dotenv = "*"
 requests = "*"
 xkcd = "*"
+pandas = "*"
+beautifulsoup4 = "*"
+datefinder = "*"
 
 [dev-packages]
 black = "*"
