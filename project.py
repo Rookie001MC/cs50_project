@@ -58,7 +58,7 @@ def webhook_handler():
             for entry in body["entry"]:
                 webhook_event = entry["messaging"][0]
                 sender_psid = webhook_event["sender"]["id"]
-                print(webhook_event)
+                print(f"\033[0;34m{webhook_event}")
 
                 if "message" in webhook_event:
                     final_request = handle_message(webhook_event["message"])
