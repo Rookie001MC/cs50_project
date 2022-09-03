@@ -20,6 +20,10 @@ verify_token = os.getenv("VERIFY_TOKEN", None)
 access_token = os.getenv("ACCESS_TOKEN", None)
 
 
+def main():
+    app.run(debug=True)
+
+
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
@@ -150,4 +154,4 @@ def profile_setup():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    main()
