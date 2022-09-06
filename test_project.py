@@ -2,6 +2,7 @@ import json
 import os
 
 import pytest
+
 from project import app
 
 
@@ -70,7 +71,7 @@ def test_webhook_post(client):
 def test_webhook_post_no_data(client):
     body = {}
     resp = client.post("/webhook", data=json.dumps(body))
-    assert resp.status_code == 404
+    assert resp.status_code == 400
 
 
 def test_webhook_post_invalid_object(client):
