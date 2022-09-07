@@ -113,7 +113,7 @@ def offset_price_emoji(offset_price):
     if offset_price == 0:
         return "no change"
     elif offset_price < 0:
-        offset_with_icon = f"⬇️ down {offset_price} dong/liter"
+        offset_with_icon = f"⬇️ down {abs(offset_price)} dong/liter"
     else:
         offset_with_icon = f"⬆️ up {offset_price} dong/liter"
     return offset_with_icon
