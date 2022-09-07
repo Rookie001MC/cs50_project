@@ -14,15 +14,22 @@ A simple Facebook Messenger Chatbot, powered by Flask.
   - [`app.py` endpoints:](#apppy-endpoints)
   - [Things that I still don't feel right with the app](#things-that-i-still-dont-feel-right-with-the-app)
   - [What I learned from the project](#what-i-learned-from-the-project)
+
 ## Installation:
 ***Note: You must have a Facebook Developer account to use this app.***
 - Clone this repository.
 - Copy `.env.example` then rename to `.env`
 - Add the required values into the `.env` file:
   - `ACCESS_TOKEN`: This is the token of your Facebook app in the Developer page.
-  - To get it, you must have both a Facebook page and a Facebook app.
-  - You can create a new Facebook page [here](https://www.facebook.com/bookmarks/pages) and a new Facebook app [here](https://developers.facebook.com/docs/development/create-an-app/).
-  - Once you have created an app, you will be taken to this page:
+  - `VERIFY_TOKEN`: This is the token to verify the connection to your Facebook app. Can be any token of your choice.
+  - `WEATHER_API_KEY`: This is the token from [OpenWeatherMap's API](https://openweathermap.org/api). 
+  - Instructions for finding these can be found online.
+- Install the dependencies:
+  - Using `pip`: `pip install -r requirements-dev.txt`
+  - Using `pipenv`: `pipenv install` 
+- (Optionally) Test the app: `python -m pytest -vvv .`
+- Run the app: `python project.py`
+
 
 ## Project structure
 - [`scripts`](./scripts/): These are the modules that powered the commands. Each modules corresponds to a command, as defined in [`utils.py`](./utils.py). 
