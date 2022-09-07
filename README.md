@@ -9,10 +9,21 @@ A simple Facebook Messenger Chatbot, powered by Flask.
   - [Video demo: Here](#video-demo-here)
   - [Requirements:](#requirements)
   - [Table of content:](#table-of-content)
+  - [Installation:](#installation)
   - [Project structure](#project-structure)
   - [`app.py` endpoints:](#apppy-endpoints)
   - [Things that I still don't feel right with the app](#things-that-i-still-dont-feel-right-with-the-app)
   - [What I learned from the project](#what-i-learned-from-the-project)
+## Installation:
+***Note: You must have a Facebook Developer account to use this app.***
+- Clone this repository.
+- Copy `.env.example` then rename to `.env`
+- Add the required values into the `.env` file:
+  - `ACCESS_TOKEN`: This is the token of your Facebook app in the Developer page.
+  - To get it, you must have both a Facebook page and a Facebook app.
+  - You can create a new Facebook page [here](https://www.facebook.com/bookmarks/pages) and a new Facebook app [here](https://developers.facebook.com/docs/development/create-an-app/).
+  - Once you have created an app, you will be taken to this page:
+
 ## Project structure
 - [`scripts`](./scripts/): These are the modules that powered the commands. Each modules corresponds to a command, as defined in [`utils.py`](./utils.py). 
 - [`tests`](./tests/): Unit test files. In addition to testing all the commands in `scripts`, it also tests for the endpoints (defined in [`app.py`](app.py)) and the utility functions (defined in [`utils.py`](utils.py)).
