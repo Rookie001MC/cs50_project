@@ -21,7 +21,7 @@ access_token = os.getenv("ACCESS_TOKEN", None)
 
 
 def main():
-    app.run(debug=True)
+    app.run()
 
 
 @app.route("/", methods=["GET"])
@@ -135,6 +135,12 @@ def profile_setup():
                         "url": "https://www.instagram.com/RealRookie001/",
                         "webview_height_ratio": "full",
                     },
+                    {
+                        "type": "web_url",
+                        "title": "Project's Github",
+                        "url": "https://github.com/Rookie001MC/cs50_project/",
+                        "webview_height_ratio": "full",
+                    }
                 ],
             }
         ],
