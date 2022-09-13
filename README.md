@@ -3,7 +3,7 @@ A simple Facebook Messenger Chatbot, powered by Flask.
 ## Video demo: [Here]()
 
 ## Requirements: 
-- Python 3.10+
+- Python 3.9+
 ## Table of content:
 - [CS50 Python Project: Messenger Assisstant](#cs50-python-project-messenger-assisstant)
   - [Video demo: Here](#video-demo-here)

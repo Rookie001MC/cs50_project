@@ -20,12 +20,12 @@ djlint = "*"
 pytest-html = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.9"
 
 [pipenv]
 allow_prereleases = true
 
 [scripts]
 test = "python -m pytest -vvv ."
-dev_server = "python project.py"
+dev_server = "python project.py --debug"
 deploy = "gunicorn project:main"

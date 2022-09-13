@@ -56,28 +56,28 @@ def webhook_handler():
     """
     Handle message events sent to the bot.
     """
-    body = json.loads(request.data.decode("utf-8"))
-    if body:
-        if body["object"] == "page":
-            for entry in body["entry"]:
-                webhook_event = entry["messaging"][0]
-                sender_psid = webhook_event["sender"]["id"]
-                print(f"\033[0;34m{webhook_event}")
+    try:
+        body = json.loads(request.data.decode("utf-8"))
+    except json.JSONDecodeError:
+        return Response(status=400, response="No data was given in the request.")
+    if body["object"] == "page":
+        for entry in body["entry"]:
+            webhook_event = entry["messaging"][0]
+            sender_psid = webhook_event["sender"]["id"]
+            print(f"\033[0;34m{webhook_event}")
 
-                if "message" in webhook_event:
-                    final_request = handle_message(webhook_event["message"])
-                    if isinstance(final_request, list) and len(final_request) >= 2:
-                        for messages in final_request:
-                            call_sendAPI(sender_psid, messages)
-                    else:
-                        call_sendAPI(sender_psid, final_request)
-                elif "postback" in webhook_event:
-                    handle_postback(sender_psid, webhook_event["postback"])
-            return Response(status=200, response="EVENT_RECEIVED")
-        else:
-            return Response(status=404)
+            if "message" in webhook_event:
+                final_request = handle_message(webhook_event["message"])
+                if isinstance(final_request, list) and len(final_request) >= 2:
+                    for messages in final_request:
+                        call_sendAPI(sender_psid, messages)
+                else:
+                    call_sendAPI(sender_psid, final_request)
+            elif "postback" in webhook_event:
+                handle_postback(sender_psid, webhook_event["postback"])
+        return Response(status=200, response="EVENT_RECEIVED")
     else:
-        return Response(status=400)
+        return Response(status=404)
 
 
 @app.route("/webhook_dev", methods=["POST"])
@@ -140,7 +140,7 @@ def profile_setup():
                         "title": "Project's Github",
                         "url": "https://github.com/Rookie001MC/cs50_project/",
                         "webview_height_ratio": "full",
-                    }
+                    },
                 ],
             }
         ],

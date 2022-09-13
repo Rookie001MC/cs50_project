@@ -22,26 +22,25 @@ def handle_message(user_message):
             user_command = re_object.group()
             full_command = user_message["text"]
 
-            match user_command:
-                case "/help":
-                    returned_object = {
-                        "text": f"""Available commands:
+            if user_command == "/help":
+                returned_object = {
+                    "text": f"""Available commands:
 
 - /xkcd [random/latest/(any number)]: 📖 Gets a XKCD webcomic. Leave blank for the latest comic.
 - /weather <city>: 🌥️ Gets the current weather of a given city. \nThe format must be (City name, Country in 2 letters.)
 - /fuel: ⛽ Gets the current price of common fuel products in Vietnam.
-                        """
-                    }
-                case "/xkcd":
-                    returned_object = xkcd_fetch.fetcher(full_command)
-                case "/weather":
-                    returned_object = weather.weather_fetch(full_command)
-                case "/fuel":
-                    returned_object = fuel_price.price_get()
-                case _:
-                    returned_object = {
-                        "text": "Sorry, but this command does not exist.\n¯\\_(ツ)_/¯"
-                    }
+                    """
+                }
+            elif user_command == "/xkcd":
+                returned_object = xkcd_fetch.fetcher(full_command)
+            elif user_command == "/weather":
+                returned_object = weather.weather_fetch(full_command)
+            elif user_command == "/fuel":
+                returned_object = fuel_price.price_get()
+            else:
+                returned_object = {
+                    "text": "Sorry, but this command does not exist.\n¯\\_(ツ)_/¯"
+                }
         else:
             returned_object = {
                 "text": "If you're trying to send me some random text, I'm sorry, cause I'm dumb.\n¯\\_(ツ)_/¯"
