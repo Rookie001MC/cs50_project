@@ -10,6 +10,7 @@ requests = "*"
 xkcd = "*"
 pandas = "*"
 beautifulsoup4 = "*"
+gunicorn = "*"
 
 [dev-packages]
 black = "*"
@@ -27,3 +28,4 @@ allow_prereleases = true
 [scripts]
 test = "python -m pytest -vvv ."
 dev_server = "python project.py"
+deploy = "gunicorn project:main"
