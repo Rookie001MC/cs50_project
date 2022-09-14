@@ -39,7 +39,7 @@ def handle_message(user_message):
             elif user_command == "/fuel":
                 returned_object = fuel_price.price_get()
             elif user_command == "/suggestion":
-                returned_object == {
+                returned_object = {
                     "text": f"""Got a suggestion 💡 or encountered an issue 💫?
 You can send them here 📫:
 https://forms.gle/WdgKjuRJTWE3sciAA"""
