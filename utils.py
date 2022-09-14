@@ -29,6 +29,7 @@ def handle_message(user_message):
 - /xkcd [random/latest/(any number)]: 📖 Gets a XKCD webcomic. Leave blank for the latest comic.
 - /weather <city>: 🌥️ Gets the current weather of a given city. \nThe format must be (City name, Country in 2 letters.)
 - /fuel: ⛽ Gets the current price of common fuel products in Vietnam.
+- /suggestions: 📫 Sends you a link to provide me a suggestion or issue report.
                     """
                 }
             elif user_command == "/xkcd":
@@ -37,6 +38,12 @@ def handle_message(user_message):
                 returned_object = weather.weather_fetch(full_command)
             elif user_command == "/fuel":
                 returned_object = fuel_price.price_get()
+            elif user_command == "/suggestion":
+                returned_object == {
+                    "text": f"""Got a suggestion 💡 or encountered an issue 💫?
+You can send them here 📫:
+https://forms.gle/WdgKjuRJTWE3sciAA"""
+                }
             else:
                 returned_object = {
                     "text": "Sorry, but this command does not exist.\n¯\\_(ツ)_/¯"

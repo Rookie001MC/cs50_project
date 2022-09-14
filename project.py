@@ -141,6 +141,12 @@ def profile_setup():
                         "url": "https://github.com/Rookie001MC/cs50_project/",
                         "webview_height_ratio": "full",
                     },
+                    {
+                        "type": "web_url",
+                        "title": "Send me a suggestion! 📫",
+                        "url": "https://forms.gle/WdgKjuRJTWE3sciAA",
+                        "webview_height_ratio": "full",
+                    },
                 ],
             }
         ],
