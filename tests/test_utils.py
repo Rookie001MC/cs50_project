@@ -16,7 +16,8 @@ def test_handle_message_command():
 - /xkcd [random/latest/(any number)]: 📖 Gets a XKCD webcomic. Leave blank for the latest comic.
 - /weather <city>: 🌥️ Gets the current weather of a given city. \nThe format must be (City name, Country in 2 letters.)
 - /fuel: ⛽ Gets the current price of common fuel products in Vietnam.
-                        """
+- /suggestion: 📫 Sends you a link to provide me a suggestion or issue report.
+                    """
     }
 
 
