@@ -29,7 +29,7 @@ def handle_message(user_message):
 - /xkcd [random/latest/(any number)]: 📖 Gets a XKCD webcomic. Leave blank for the latest comic.
 - /weather <city>: 🌥️ Gets the current weather of a given city. \nThe format must be (City name, Country in 2 letters.)
 - /fuel: ⛽ Gets the current price of common fuel products in Vietnam.
-- /suggestions: 📫 Sends you a link to provide me a suggestion or issue report.
+- /suggestion: 📫 Sends you a link to provide me a suggestion or issue report.
                     """
                 }
             elif user_command == "/xkcd":
@@ -67,6 +67,7 @@ def handle_postback(sender_psid, postback_event):
             "- /weather <city>: 🌥️ Gets the current weather of a given city. \nThe format must be (City name, Country in 2 letters.)",
             "- /fuel: ⛽ Gets the current price of common fuel products in Vietnam.",
             "More features will be added in the upcoming months, provided if I have more free time as I'm in the process of applying to University.",
+            'If you want to send me a suggestion, use the command "/suggestion" or click on the menu.',
         ]
 
         for message in welcome_messages:
