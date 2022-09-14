@@ -156,6 +156,7 @@ def profile_setup():
         r = requests.post(url=profile_url, json=profile)
 
         if r.status_code == 200:
+            print(f"Profile set up successfully.")
             return f"<p>Successfully setup profile!</p>"
         elif r.status_code >= 400:
             print(f"Request failed: {r.text}")
@@ -165,5 +166,11 @@ def profile_setup():
         print(f"No connection: {err}")
 
 
+@app.route("/privacy", methods=["GET"])
+def privacy_policy():
+    return render_template("privacy.html")
+
+
 if __name__ == "__main__":
+    profile_setup()
     main()
